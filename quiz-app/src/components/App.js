@@ -1,17 +1,17 @@
-import { useEffect, useReducer } from 'react';
-import Header from './Header';
-import Main from './Main';
-import Loader from './Loader';
-import Error from './Error';
-import StartScreen from './StartScreen';
-import Question from './Question';
-import NextButton from './NextButton';
-import Progress from './Progress';
-import FinishScreen from './FinishScreen';
-import Footer from './Footer';
-import Timer from './Timer';
+import { useEffect, useReducer } from 'react'
+import Header from './Header'
+import Main from './Main'
+import Loader from './Loader'
+import Error from './Error'
+import StartScreen from './StartScreen'
+import Question from './Question'
+import NextButton from './NextButton'
+import Progress from './Progress'
+import FinishScreen from './FinishScreen'
+import Footer from './Footer'
+import Timer from './Timer'
 
-const SECS_PER_QUESTION = 30;
+const SECS_PER_QUESTION = 30
 
 const initialState = {
   questions: [],
@@ -21,22 +21,22 @@ const initialState = {
   points: 0,
   highScore: 0,
   expireTime: null,
-};
+}
 
 function reducer(state, action) {
   switch (action.type) {
     case 'dataRecived':
-      return { ...state, questions: action.payload, status: 'isReady' };
+      return { ...state, questions: action.payload, status: 'isReady' }
     case 'dataFailed':
-      return { ...state, status: 'isError' };
+      return { ...state, status: 'isError' }
     case 'start':
       return {
         ...state,
         status: 'isActive',
         expireTime: state.questions.length * SECS_PER_QUESTION,
-      };
+      }
     case 'newAnswer':
-      const question = state.questions.at(state.index);
+      const question = state.questions.at(state.index)
       return {
         ...state,
         answer: action.payload,
@@ -44,35 +44,35 @@ function reducer(state, action) {
           action.payload === question.correctOption
             ? state.points + question.points
             : state.points,
-      };
+      }
     case 'nextQuestion':
       return {
         ...state,
         index: state.index + 1,
         answer: null,
-      };
+      }
     case 'finished':
       return {
         ...state,
         status: 'isFinished',
         highScore:
           state.highScore <= state.points ? state.points : state.highScore,
-      };
+      }
     case 'restart':
       return {
         ...initialState,
         questions: state.questions,
         status: 'isReady',
         highScore: state.highScore,
-      };
+      }
     case 'countTime':
       return {
         ...state,
         expireTime: state.expireTime - 1,
         status: state.expireTime === 0 ? 'isFinished' : state.status,
-      };
+      }
     default:
-      throw new Error('Action unknow');
+      throw new Error('Action unknow')
   }
 }
 
@@ -80,13 +80,13 @@ export default function App() {
   const [
     { questions, status, index, answer, points, highScore, expireTime },
     dispatch,
-  ] = useReducer(reducer, initialState);
+  ] = useReducer(reducer, initialState)
 
-  const numQuestions = questions.length;
+  const numQuestions = questions.length
   const maxPossiblePoints = questions.reduce(
     (totalPoint, currentEl) => totalPoint + currentEl.points,
     0
-  );
+  )
 
   useEffect(() => {
     fetch('http://localhost:8000/questions')
@@ -101,8 +101,8 @@ export default function App() {
         dispatch({
           type: 'dataFailed',
         })
-      );
-  }, []);
+      )
+  }, [])
 
   return (
     <div className="app">
@@ -151,5 +151,5 @@ export default function App() {
         )}
       </Main>
     </div>
-  );
+  )
 }
