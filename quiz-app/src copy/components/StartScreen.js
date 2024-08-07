@@ -1,12 +1,8 @@
-import { useQuiz } from '../contexts/QuizContext'
-
-function StartScreen() {
-  const { numQuestions, dispatch } = useQuiz()
-
+function StartScreen({ numQuestions, dispatch }) {
   function handleStart() {
     dispatch({
       type: 'start',
-    })
+    });
   }
 
   return (
@@ -17,7 +13,7 @@ function StartScreen() {
         Let's start
       </button>
     </div>
-  )
+  );
 }
 
-export default StartScreen
+export default StartScreen;

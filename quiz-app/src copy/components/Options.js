@@ -1,9 +1,5 @@
-import { useQuiz } from '../contexts/QuizContext'
-
-function Options({ question }) {
-  const { dispatch, answer } = useQuiz()
-
-  const hasAnswer = answer !== null
+function Options({ question, dispatch, answer }) {
+  const hasAnswer = answer !== null;
 
   return (
     <div className="options">
@@ -22,14 +18,14 @@ function Options({ question }) {
             dispatch({
               type: 'newAnswer',
               payload: index,
-            })
+            });
           }}
         >
           {option}
         </button>
       ))}
     </div>
-  )
+  );
 }
 
-export default Options
+export default Options;
